@@ -1,7 +1,7 @@
 import { test, expect } from '../fixtures/fixtures';
 import { users, products, checkoutInfo } from '../utils/test-data';
 
-test.describe('Checkout (оформлення замовлення)', () => {
+test.describe('Checkout (order placement)', () => {
   test.beforeEach(async ({ loginPage, inventoryPage, cartPage }) => {
     await loginPage.open();
     await loginPage.login(users.standard.username, users.standard.password);
@@ -11,7 +11,7 @@ test.describe('Checkout (оформлення замовлення)', () => {
     await cartPage.proceedToCheckout();
   });
 
-  test('повний happy-path сценарій оформлення замовлення', async ({ checkoutPage, page }) => {
+  test('full happy-path order placement scenario', async ({ checkoutPage, page }) => {
     await checkoutPage.fillCustomerInfo(
       checkoutInfo.firstName,
       checkoutInfo.lastName,
@@ -30,14 +30,14 @@ test.describe('Checkout (оформлення замовлення)', () => {
     await expect(checkoutPage.completeHeader).toHaveText('Thank you for your order!');
   });
 
-  test('помилка, якщо не заповнено обов\'язкове поле', async ({ checkoutPage }) => {
+  test('error when a required field is empty', async ({ checkoutPage }) => {
     await checkoutPage.continueButton.click();
 
     await expect(checkoutPage.checkoutErrorMessage).toBeVisible();
     await expect(checkoutPage.checkoutErrorMessage).toContainText('First Name is required');
   });
 
-  test('підсумкова сума враховує податок (subtotal + tax = total)', async ({ checkoutPage }) => {
+  test('total amount includes tax (subtotal + tax = total)', async ({ checkoutPage }) => {
     await checkoutPage.fillCustomerInfo(
       checkoutInfo.firstName,
       checkoutInfo.lastName,
@@ -56,7 +56,7 @@ test.describe('Checkout (оформлення замовлення)', () => {
     expect(total).toBeCloseTo(subtotal + tax, 2);
   });
 
-  test('кнопка "Back Home" після завершення повертає на inventory', async ({ checkoutPage, page }) => {
+  test('the "Back Home" button returns to inventory after completion', async ({ checkoutPage, page }) => {
     await checkoutPage.fillCustomerInfo(
       checkoutInfo.firstName,
       checkoutInfo.lastName,

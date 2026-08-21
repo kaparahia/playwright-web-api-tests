@@ -15,17 +15,17 @@ const MISSING_PRODUCT_ID = 9_999_999;
 const EXPECTED_CATEGORY = "men's clothing";
 const MAX_RESPONSE_TIME_MS = 3_000;
 
-test.describe('API: повна верифікація одного запиту (чекліст)', () => {
-  test('GET /products/1 - статус, заголовки, схема, дані, час, консистентність', async ({
+test.describe('API: full verification of a single request (checklist)', () => {
+  test('GET /products/1 - status, headers, schema, data, timing, and consistency', async ({
     apiClient,
   }) => {
     const { result: response, durationMs } = await measureAsync(() => apiClient.getProductById(PRODUCT_ID));
 
-    await test.step('Перевірити HTTP-відповідь', async () => {
+    await test.step('Verify the HTTP response', async () => {
       assertJsonResponse(response, { statusText: 'OK' });
     });
 
-    const product: Product = await test.step('Прочитати та перевірити товар', async () => {
+    const product: Product = await test.step('Read and validate the product', async () => {
       const product: Product = await response.json();
       assertValidProductSchema(product);
       assertObjectMatches(product, {
@@ -35,17 +35,17 @@ test.describe('API: повна верифікація одного запиту 
       return product;
     });
 
-    await test.step('Перевірити швидкість відповіді', async () => {
+    await test.step('Verify response speed', async () => {
       assertResponseCompletesWithin(durationMs, MAX_RESPONSE_TIME_MS);
     });
 
-    await test.step('Перевірити консистентність між endpoint-ами', async () => {
+    await test.step('Verify consistency between endpoints', async () => {
       const listResponse = await apiClient.getAllProducts();
       const allProducts: Product[] = await listResponse.json();
       assertArrayContainsEqualItem(allProducts, product);
     });
 
-    await test.step('Перевірити неіснуючий товар', async () => {
+    await test.step('Verify a missing product', async () => {
       const missingResponse = await apiClient.getProductById(MISSING_PRODUCT_ID);
       const missingBody = await missingResponse.json().catch(() => null);
       assertValuesAreDifferent(missingBody, product);

@@ -3,7 +3,7 @@ import { Product } from '../../api/types/product.types';
 import { assertValidProductSchema } from '../../utils/schema-validators';
 
 test.describe('API: GET /products', () => {
-  test('статус 200, заголовки та формат відповіді валідні', async ({ apiClient }) => {
+  test('status 200, response headers and format are valid', async ({ apiClient }) => {
     const response = await apiClient.getAllProducts();
 
     // 1. Status code.
@@ -18,7 +18,7 @@ test.describe('API: GET /products', () => {
     expect(Array.isArray(body)).toBe(true);
   });
 
-  test('повертає непорожній список товарів', async ({ apiClient }) => {
+  test('returns a non-empty list of products', async ({ apiClient }) => {
     const response = await apiClient.getAllProducts();
     const products: Product[] = await response.json();
 
@@ -27,7 +27,7 @@ test.describe('API: GET /products', () => {
     expect(products.length).toBeGreaterThan(0);
   });
 
-  test('кожен товар у списку відповідає очікуваній схемі', async ({ apiClient }) => {
+  test('each product in the list matches the expected schema', async ({ apiClient }) => {
     const response = await apiClient.getAllProducts();
     const products: Product[] = await response.json();
 
@@ -36,7 +36,7 @@ test.describe('API: GET /products', () => {
     }
   });
 
-  test('час відповіді не перевищує прийнятний поріг', async ({ apiClient }) => {
+  test('response time stays below the acceptable threshold', async ({ apiClient }) => {
     const { response, durationMs } = await apiClient.getAllProductsTimed();
 
     expect(response.status()).toBe(200);
@@ -44,7 +44,7 @@ test.describe('API: GET /products', () => {
     expect(durationMs).toBeLessThan(3000);
   });
 
-  test('query-параметр limit обмежує кількість результатів', async ({ apiClient }) => {
+  test('query parameter limit restricts the number of results', async ({ apiClient }) => {
     const response = await apiClient.getAllProducts({ limit: 5 });
     const products: Product[] = await response.json();
 
@@ -52,7 +52,7 @@ test.describe('API: GET /products', () => {
     expect(products).toHaveLength(5);
   });
 
-  test('query-параметр sort=desc змінює порядок відносно asc', async ({ apiClient }) => {
+  test('query parameter sort=desc changes the order relative to asc', async ({ apiClient }) => {
     const ascResponse = await apiClient.getAllProducts({ sort: 'asc' });
     const descResponse = await apiClient.getAllProducts({ sort: 'desc' });
 
@@ -68,7 +68,7 @@ test.describe('API: GET /products', () => {
 });
 
 test.describe('API: GET /products/:id', () => {
-  test('валідний id повертає коректний товар з правильною схемою', async ({ apiClient }) => {
+  test('a valid id returns the correct product with the proper schema', async ({ apiClient }) => {
     const response = await apiClient.getProductById(1);
 
     expect(response.status()).toBe(200);
@@ -79,7 +79,7 @@ test.describe('API: GET /products/:id', () => {
     assertValidProductSchema(product);
   });
 
-  test('дані товару узгоджені між списком і детальним ендпоінтом', async ({ apiClient }) => {
+  test('product data is consistent between the list and detail endpoints', async ({ apiClient }) => {
     const listResponse = await apiClient.getAllProducts();
     const products: Product[] = await listResponse.json();
     const firstFromList = products[0];
@@ -92,7 +92,7 @@ test.describe('API: GET /products/:id', () => {
     expect(productDetail).toEqual(firstFromList);
   });
 
-  test('неіснуючий id не повертає валідний товар', async ({ apiClient }) => {
+  test('a non-existent id does not return a valid product', async ({ apiClient }) => {
     const response = await apiClient.getProductById(999999);
 
     // For a nonexistent id, FakeStoreAPI returns 200 with an empty body rather
@@ -104,7 +104,7 @@ test.describe('API: GET /products/:id', () => {
 });
 
 test.describe('API: GET /products/categories', () => {
-  test('повертає список категорій очікуваного формату', async ({ apiClient }) => {
+  test('returns a list of categories in the expected format', async ({ apiClient }) => {
     const response = await apiClient.getCategories();
 
     expect(response.status()).toBe(200);
@@ -120,7 +120,7 @@ test.describe('API: GET /products/categories', () => {
 });
 
 test.describe('API: GET /products/category/:name', () => {
-  test('усі повернуті товари дійсно належать запитаній категорії', async ({ apiClient }) => {
+  test('all returned products actually belong to the requested category', async ({ apiClient }) => {
     const response = await apiClient.getProductsByCategory('electronics');
 
     expect(response.status()).toBe(200);
