@@ -4,13 +4,13 @@ import { Product, ProductPayload } from '../../api/types/product.types';
 const newProductPayload: ProductPayload = {
   title: 'Test Automation Backpack',
   price: 49.99,
-  description: 'Товар, створений автотестом для перевірки POST /products',
+  description: 'Product created by an automated test to validate POST /products',
   category: 'electronics',
   image: 'https://i.pravatar.cc',
 };
 
-test.describe('API: POST /products (створення)', () => {
-  test('створення товару повертає 201 і відображає надіслані дані', async ({ apiClient }) => {
+test.describe('API: POST /products (create)', () => {
+  test('creating a product returns 201 and reflects the submitted data', async ({ apiClient }) => {
     const response = await apiClient.createProduct(newProductPayload);
 
     expect(response.status()).toBe(201);
@@ -30,8 +30,8 @@ test.describe('API: POST /products (створення)', () => {
   });
 });
 
-test.describe('API: PUT /products/:id (повне оновлення)', () => {
-  test('оновлення товару повертає 200 і нові значення полів', async ({ apiClient }) => {
+test.describe('API: PUT /products/:id (full update)', () => {
+  test('updating a product returns 200 and the new field values', async ({ apiClient }) => {
     const updatedPayload: ProductPayload = {
       ...newProductPayload,
       title: 'Updated Backpack Title',
@@ -49,8 +49,8 @@ test.describe('API: PUT /products/:id (повне оновлення)', () => {
   });
 });
 
-test.describe('API: PATCH /products/:id (часткове оновлення)', () => {
-  test('часткове оновлення змінює тільки передане поле', async ({ apiClient }) => {
+test.describe('API: PATCH /products/:id (partial update)', () => {
+  test('partial update changes only the provided field', async ({ apiClient }) => {
     const response = await apiClient.patchProduct(1, { price: 123.45 });
 
     expect(response.status()).toBe(200);
@@ -61,7 +61,7 @@ test.describe('API: PATCH /products/:id (часткове оновлення)', 
 });
 
 test.describe('API: DELETE /products/:id', () => {
-  test('видалення товару повертає 200 і об\'єкт видаленого товару', async ({ apiClient }) => {
+  test('deleting a product returns 200 and the deleted product object', async ({ apiClient }) => {
     const response = await apiClient.deleteProduct(1);
 
     expect(response.status()).toBe(200);

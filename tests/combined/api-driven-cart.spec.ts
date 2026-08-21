@@ -15,8 +15,8 @@ import { assertValidProductSchema } from '../../utils/schema-validators';
  * (request) and page objects (page), which is the technical essence of a
  * combined test.
  */
-test.describe('Комбінований сценарій: API визначає дані для UI-флоу', () => {
-  test('кількість товарів з API визначає, скільки додати в кошик на UI, і кошик це відображає', async ({
+test.describe('Combined flow: API determines the data for the UI flow', () => {
+  test('the product count from the API determines how many items to add in the UI, and the cart reflects it', async ({
     apiClient,
     loginPage,
     inventoryPage,

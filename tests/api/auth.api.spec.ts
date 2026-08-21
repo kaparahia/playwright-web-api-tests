@@ -3,7 +3,7 @@ import { LoginResponse } from '../../api/types/product.types';
 import { assertLooksLikeJwt } from '../../utils/schema-validators';
 
 test.describe('API: POST /auth/login', () => {
-  test('валідні креденшли повертають токен коректного формату', async ({ apiClient }) => {
+  test('valid credentials return a token in the correct format', async ({ apiClient }) => {
     const response = await apiClient.login({
       username: 'mor_2314',
       password: '83r5^_',
@@ -17,7 +17,7 @@ test.describe('API: POST /auth/login', () => {
     assertLooksLikeJwt(body.token);
   });
 
-  test('невірний пароль не повертає успішну автентифікацію', async ({ apiClient }) => {
+  test('wrong password does not return successful authentication', async ({ apiClient }) => {
     const response = await apiClient.login({
       username: 'mor_2314',
       password: 'wrong-password',
@@ -27,7 +27,7 @@ test.describe('API: POST /auth/login', () => {
     expect(response.ok()).toBeFalsy();
   });
 
-  test('порожній payload обробляється як помилка запиту', async ({ apiClient }) => {
+  test('empty payload is handled as a request error', async ({ apiClient }) => {
     const response = await apiClient.login({ username: '', password: '' });
 
     expect(response.ok()).toBeFalsy();
